@@ -1,8 +1,8 @@
 'use strict';
 
 angular.
-  module('phonecatApp').
-  animation('.phone', function phoneAnimationFactory() {
+  module('schedulerApp').
+  animation('.scheduler', function schedulerAnimationFactory() {
     return {
       addClass: animateIn,
       removeClass: animateOut

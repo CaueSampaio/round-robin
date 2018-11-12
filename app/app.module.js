@@ -1,10 +1,8 @@
 'use strict';
 
-// Define the `phonecatApp` module
-angular.module('phonecatApp', [
+// Define the `scheduler` module
+angular.module('schedulerApp', [
   'ngAnimate',
   'ngRoute',
-  'core',
-  'phoneDetail',
-  'phoneList'
+  'ngMaterial'
 ]);

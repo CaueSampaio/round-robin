@@ -1,34 +1,77 @@
 <!doctype html>
-<html lang="en" ng-app="phonecatApp">
-  <head>
-    <meta charset="utf-8">
-    <title>Google Phone Gallery</title>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="app.animations.css" />
+<html lang="en" ng-app="schedulerApp">
 
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="app.module.js"></script>
-    <script src="app.config.js"></script>
-    <script src="app.animations.js"></script>
-    <script src="core/core.module.js"></script>
-    <script src="core/checkmark/checkmark.filter.js"></script>
-    <script src="core/phone/phone.module.js"></script>
-    <script src="core/phone/phone.service.js"></script>
-    <script src="phone-list/phone-list.module.js"></script>
-    <script src="phone-list/phone-list.component.js"></script>
-    <script src="phone-detail/phone-detail.module.js"></script>
-    <script src="phone-detail/phone-detail.component.js"></script>
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <title>Round-robin</title>
+  <link rel="stylesheet" href="app.css" />
+  <link rel="stylesheet" href="app.animations.css" />
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
 
-    <div class="view-container">
-      <div ng-view class="view-frame"></div>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+  <script src="app.module.js"></script>
+  <script src="app.config.js"></script>
+  <script src="app.controller.js"></script>
+  <script src="app.animations.js"></script>
+  <script src="scheduler/scheduler.module.js"></script>
+  <script src="scheduler/scheduler.component.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+</head>
+
+<body>
+
+  <div flex class="container" ng-controller="SchedulerController">
+    <header layout="row" layout-align="center center">
+      <h1 class="title">
+        Simulador de Escalonamento por Round-Robin
+      </h1>
+    </header>
+    <div layout="row" layout-align "space-around center">
+      <div flex="50" layout="column" flex-layout="space-around center" class="machine-side">
+        <div class="processor">
+          Processador
+        </div>
+        <div class="queue">
+          Fila
+        </div>
+      </div>
+      <div flex="50" class="config-side">
+        <header flex="70" class="quantum">
+          <h3>Defina o quantum antes de continuar</h3>
+          <div flex="100">
+            <form class="quantum-form" name="quantumForm">
+              <input placeholder="Quantum em ms" ng-model="quantum">
+              <button class="primary-button">Salvar</button>
+            </form>
+          </div>
+        </header>
+        <div class="processes">
+          <ul>
+            <li ng-repeat="process in processes" layout="row">
+              <input class="new-process" ng-model="process.arrival">
+              <input class="new-process" ng-model="process.time">
+            </li>
+          </ul>
+          <form name="newProcessForm">
+            <div layout="row">
+              <input class="new-process" ng-model="newProcess.arrival" placeholder="Momento de chegada">
+              <input class="new-process" ng-model="newProcess.time" placeholder="Tempo do processo">
+            </div>
+            <button ng-click="addProcess()">Adicionar process</button>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 
-  </body>
+</body>
+
 </html>
