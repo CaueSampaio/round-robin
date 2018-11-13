@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 ul {
   margin: 0px;
   padding: 0px;
@@ -10,8 +14,7 @@ li {
 }
 
 input {
-  width: 100%;
-  height: 30px;
+  height: 60px;
   padding: 10px;
 }
 
@@ -28,7 +31,8 @@ input {
   width: 450px;
   height: 200px;
   border: 3px solid rgb(9, 80, 138);
-  margin: 30px auto;
+  margin: 15px auto;
+  padding: 10px;
 }
 
 .queue {
@@ -41,10 +45,9 @@ input {
 
 .primary-button {
   width: 100%;
-  height: 30px;
+  height: 60px;
   background: rgb(77, 147, 201);
   color: #fff;
   border: none;
-  padding: 30px 10px;
 }
 

@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="app.animations.css" />
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -34,39 +35,55 @@
         Simulador de Escalonamento por Round-Robin
       </h1>
     </header>
-    <div layout="row" layout-align "space-around center">
+    <div layout="row" layout-align="space-around center">
       <div flex="50" layout="column" flex-layout="space-around center" class="machine-side">
+        <span>{{clock}}</span>
         <div class="processor">
           Processador
         </div>
         <div class="queue">
-          Fila
-        </div>
-      </div>
-      <div flex="50" class="config-side">
-        <header flex="70" class="quantum">
-          <h3>Defina o quantum antes de continuar</h3>
-          <div flex="100">
-            <form class="quantum-form" name="quantumForm">
-              <input placeholder="Quantum em ms" ng-model="quantum">
-              <button class="primary-button">Salvar</button>
-            </form>
-          </div>
-        </header>
-        <div class="processes">
           <ul>
-            <li ng-repeat="process in processes" layout="row">
-              <input class="new-process" ng-model="process.arrival">
-              <input class="new-process" ng-model="process.time">
+            <li ng-repeat="process in queue track by process.name">
+              {{process.name}}
             </li>
           </ul>
-          <form name="newProcessForm">
-            <div layout="row">
-              <input class="new-process" ng-model="newProcess.arrival" placeholder="Momento de chegada">
-              <input class="new-process" ng-model="newProcess.time" placeholder="Tempo do processo">
-            </div>
-            <button ng-click="addProcess()">Adicionar process</button>
+        </div>
+        <div class="queue">
+          Finalizados
+        </div>
+        <div>
+          <md-button class="md-raised md-success" ng-click="nextProcess()" ng-disabled="!running">Próxima etapa</md-button>
+        </div>
+      </div>
+      <div flex layout="column" layout-align="space-around center" class="config-side">
+        <header layout="column" layout-align="start center" flex class="quantum">
+          <div>
+            <form layout="row" layout-align="space-between center" name="quantumForm">
+              <input placeholder="Quantum em ms" ng-model="quantum" ng-disabled="lockQuantum">
+              <md-button class="md-primary md-raised" ng-click="defineQuantum()" ng-disabled="lockQuantum">Salvar</md-button>
+            </form>
+          </div>
+          <div style="margin: 10px 0;">
+            Memória disponível: <span>{{memoryLeft}}</span>
+          </div>
+        </header>
+        <div layout="column" layout-align="space-between center" class="processes">
+          <ul>
+            <li style="margin-bottom: 10px;" ng-repeat="process in processes" layout="row" layout-align="center space-around">
+              <span style="margin-right: 10px;">{{process.name}}:</span>
+              <span style="margin-right: 10px;">Entrada: {{process.arrival}}</span>
+              <span>Tempo: {{process.time}}</span>
+            </li>
+          </ul>
+          <form layout="row" name="newProcessForm">
+            <input class="new-process" ng-model="newProcess.arrival" placeholder="Momento de chegada">
+            <input class="new-process" ng-model="newProcess.time" placeholder="Tempo do processo">
+            <md-button class="md-primary md-raised" ng-disabled="newProcess.time > memoryLeft || running" ng-click="addProcess()">
+              <md-icon>add</md-icon>
+            </md-button>
           </form>
+          <md-button class="md-warn md-raised" ng-disabled="lockQuantum == false || processes.length == 0 || running" ng-click="init()">Iniciar</md-button>
+          <span ng-if="newProcess.time > memoryLeft">Limite de memória excedido</span>
         </div>
       </div>
     </div>
