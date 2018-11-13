@@ -37,29 +37,29 @@
     </header>
     <div layout="row" layout-align="space-around center">
       <div flex="50" layout="column" flex-layout="space-around center" class="machine-side">
-        <span>{{clock}}</span>
+        <span>Clock: {{clock}} - RemainingQuantum: {{remainingQuantum}}</span>
         <div class="processor">
-          Processador
+          {{processor}}
         </div>
         <div class="queue">
           <ul>
             <li ng-repeat="process in queue track by process.name">
-              {{process.name}}
+              {{process}}
             </li>
           </ul>
         </div>
         <div class="queue">
-          Finalizados
+          {{done}}
         </div>
         <div>
-          <md-button class="md-raised md-success" ng-click="nextProcess()" ng-disabled="!running">Próxima etapa</md-button>
+          <md-button class="md-raised md-success" ng-click="nextStep()" ng-disabled="!running">Próxima etapa</md-button>
         </div>
       </div>
       <div flex layout="column" layout-align="space-around center" class="config-side">
         <header layout="column" layout-align="start center" flex class="quantum">
           <div>
             <form layout="row" layout-align="space-between center" name="quantumForm">
-              <input placeholder="Quantum em ms" ng-model="quantum" ng-disabled="lockQuantum">
+              <input placeholder="Quantum em ms" type="number" ng-model="quantum" ng-disabled="lockQuantum">
               <md-button class="md-primary md-raised" ng-click="defineQuantum()" ng-disabled="lockQuantum">Salvar</md-button>
             </form>
           </div>
@@ -76,8 +76,8 @@
             </li>
           </ul>
           <form layout="row" name="newProcessForm">
-            <input class="new-process" ng-model="newProcess.arrival" placeholder="Momento de chegada">
-            <input class="new-process" ng-model="newProcess.time" placeholder="Tempo do processo">
+            <input class="new-process" type="number" ng-model="newProcess.arrival" placeholder="Momento de chegada">
+            <input class="new-process" type="number" ng-model="newProcess.time" placeholder="Tempo do processo">
             <md-button class="md-primary md-raised" ng-disabled="newProcess.time > memoryLeft || running" ng-click="addProcess()">
               <md-icon>add</md-icon>
             </md-button>

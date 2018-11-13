@@ -1,42 +1,83 @@
 angular.
     module('schedulerApp').
-    controller('SchedulerController', ['$scope', function($scope) {
-        
+    controller('SchedulerController', ['$scope', function ($scope) {
+
         $scope.clock = 0;
         $scope.processes = [];
+        $scope.processor = null;
         $scope.queue = [];
+        $scope.done = [];
+        $scope.remainingQuantum;
         $scope.memory = [60, 30, 10];
         $scope.memoryLeft = $scope.memory[0];
 
-        $scope.defineQuantum = function() {
+        $scope.defineQuantum = function () {
             $scope.lockQuantum = true;
         }
-        
-        $scope.addProcess = function() {
+
+        $scope.addProcess = function () {
             let process = {
                 arrival: $scope.newProcess.arrival,
                 time: $scope.newProcess.time,
                 name: 'P ' + ($scope.processes.length + 1)
             }
-            if(process.time <= $scope.memoryLeft) {
+            if (process.time <= $scope.memoryLeft) {
                 $scope.processes.push(process);
-                $scope.memoryLeft -= process.time; 
+                $scope.memoryLeft -= process.time;
             }
             $scope.newProcess = {};
         }
 
-        $scope.init = function() {
+        $scope.init = function () {
             $scope.running = true;
         }
 
-        $scope.nextProcess = function() {
-            $scope.clock = $scope.clock + parseInt($scope.quantum);
-            $scope.processes.forEach(function(item, index) {
-                if($scope.clock >= item.arrival) {
-                    $scope.queue.push(item);
-                    $scope.processes.splice(index, 1)
+        $scope.nextStep = function () {
+            if($scope.queue.length > 0 && ($scope.remainingQuantum == 0 || $scope.processor.time == 0)) {
+                queueProcessor();
+            }
+            $scope.remainingQuantum = $scope.quantum;
+            if(!!$scope.processor) {
+                const newTime = $scope.clock + $scope.quantum;
+            }
+            while ($scope.remainingQuantum >= 0) {
+                if($scope.queue.length > 0) queueProcessor();
+                $scope.clock++;
+                if(!!$scope.processor) $scope.remainingQuantum--;
+                addToQueue();
+                if(!!$scope.processor) $scope.processor.time--;
+                if (!!$scope.processor && $scope.processor.time == 0) {
+                    processorToDone();
+                }
+            }
+        }
 
+        let addToQueue = function () {
+            $scope.processes.forEach(function (item, index) {
+                if ($scope.clock >= item.arrival) {
+                    item.queue = Object.assign($scope.clock)
+                    $scope.queue.push(item);
+                    $scope.processes.splice(index, 1);
                 }
             })
         }
-}])
+
+        let queueProcessor = function () {
+            if ($scope.processor == null && $scope.queue.length > 0) {
+                $scope.processor = Object.assign($scope.queue[0]);
+                $scope.queue.splice(0, 1);
+            } else if (!!$scope.processor && $scope.quantum >= $scope.processor.time) {
+                $scope.processor = Object.assign($scope.processor);
+            } else if (!!$scope.processor && $scope.queue.length > 0 && $scope.remainingQuantum == 0) {
+                $scope.queue.push(Object.assign($scope.processor));
+                $scope.processor = Object.assign($scope.queue[0]);
+                $scope.queue.splice(0, 1);
+            }
+        }
+        
+        let processorToDone = function () {
+            $scope.processor.done = $scope.clock;
+            $scope.done.push(Object.assign($scope.processor));
+            $scope.processor = null;
+        }
+    }])
