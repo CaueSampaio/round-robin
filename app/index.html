@@ -37,22 +37,29 @@
     </header>
     <div layout="row" layout-align="space-around center">
       <div flex="50" layout="column" flex-layout="space-around center" class="machine-side">
-        <span>Clock: {{clock}} - RemainingQuantum: {{remainingQuantum}}</span>
-        <div class="processor">
-          {{processor}}
+        <span layout="row" layout-align="center center">Tempo: {{clock}}</span>
+        <div class="processor" layout="row" layout-align="center center">
+          <span ng-if="processor == null">Processador</span>
+          <span ng-if="processor != null">{{processor}}</span>
         </div>
-        <div class="queue">
-          <ul>
+        <div class="queue" layout="row" layout-align="center center">
+          <span ng-if="queue.length == 0">Fila</span>
+          <ul ng-if="queue.length > 0">
             <li ng-repeat="process in queue track by process.name">
               {{process}}
             </li>
           </ul>
         </div>
-        <div class="queue">
-          {{done}}
+        <div class="queue" layout="row" layout-align="center center">
+          <span ng-if="done.length == 0">Processos finalizados</span>
+          <ul>
+            <li ng-repeat="process in done">
+              {{process}}
+            </li>
+          </ul>
         </div>
-        <div>
-          <md-button class="md-raised md-success" ng-click="nextStep()" ng-disabled="!running">Próxima etapa</md-button>
+        <div layout="row" layout-align="center center">
+          <md-button class="md-raised md-success" ng-click="nextStep()" ng-disabled="!running || (processes.length == 0 && queue == 0 && processor == null)">Próxima etapa</md-button>
         </div>
       </div>
       <div flex layout="column" layout-align="space-around center" class="config-side">

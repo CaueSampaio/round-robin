@@ -8,11 +8,29 @@ angular.
         $scope.queue = [];
         $scope.done = [];
         $scope.remainingQuantum;
-        $scope.memory = [60, 30, 10];
+        $scope.memory = [40, 35, 25];
+        $scope.memoryAdresses = [
+            {
+                'Location': 'M1',
+                'Space': 50 
+            },
+            {
+                'Location': 'M2',
+                'Space': 30
+            },
+            {
+                'Location': 'M3',
+                'Space': 20
+            }
+        ];
         $scope.memoryLeft = $scope.memory[0];
 
         $scope.defineQuantum = function () {
             $scope.lockQuantum = true;
+        }
+
+        $scope.checkWorstFit = function(processTime) {
+            let selectedLocation;
         }
 
         $scope.addProcess = function () {
@@ -33,26 +51,28 @@ angular.
         }
 
         $scope.nextStep = function () {
-            if($scope.queue.length > 0 && ($scope.remainingQuantum == 0 || $scope.processor.time == 0)) {
+            if($scope.queue.length > 0 && ($scope.remainingQuantum == 0 || (!!$scope.processor && $scope.processor.time == 0))) {
                 queueProcessor();
             }
             $scope.remainingQuantum = $scope.quantum;
             if(!!$scope.processor) {
                 const newTime = $scope.clock + $scope.quantum;
             }
-            while ($scope.remainingQuantum >= 0) {
+            while ($scope.remainingQuantum >= 0 ) {
                 if($scope.queue.length > 0) queueProcessor();
                 $scope.clock++;
                 if(!!$scope.processor) $scope.remainingQuantum--;
                 addToQueue();
-                if(!!$scope.processor) $scope.processor.time--;
+                if(!!$scope.processor && $scope.processor.time > 0) $scope.processor.time--;
                 if (!!$scope.processor && $scope.processor.time == 0) {
                     processorToDone();
+                    break
                 }
             }
         }
 
         let addToQueue = function () {
+            if(!!$scope.processes && $scope.processes.length > 0)
             $scope.processes.forEach(function (item, index) {
                 if ($scope.clock >= item.arrival) {
                     item.queue = Object.assign($scope.clock)
@@ -76,6 +96,7 @@ angular.
         }
         
         let processorToDone = function () {
+            debugger
             $scope.processor.done = $scope.clock;
             $scope.done.push(Object.assign($scope.processor));
             $scope.processor = null;
