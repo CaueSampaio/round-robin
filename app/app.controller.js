@@ -12,33 +12,34 @@ angular.
         $scope.memoryAdresses = [
             {
                 'Location': 'M1',
-                'Space': 50
+                'Space': 30
             },
             {
                 'Location': 'M2',
-                'Space': 30
+                'Space': 50
             },
             {
                 'Location': 'M3',
                 'Space': 20
             }
         ];
-        $scope.memoryLeft = $scope.memory[0];
+        $scope.memoryLeft = $scope.memoryAdresses[0].Space + $scope.memoryAdresses[1].Space + $scope.memoryAdresses[2].Space;
 
         $scope.defineQuantum = function () {
             $scope.lockQuantum = true;
         }
 
         $scope.checkWorstFit = function (processTime) {
+            debugger
             let biggerSpace = {
                 'index': null,
-                'difference': 0
+                'difference': -1
             };
             if($scope.checkMemoryAvailable()) {
                 debugger
                 $scope.memoryAdresses.forEach(function(item, index) {
                     console.log("Item foreach", item)
-                    if(item.Space > processTime && item.Space - processTime > biggerSpace.difference) {
+                    if(item.Space >= processTime && item.Space - processTime > biggerSpace.difference) {
                         biggerSpace = {
                             'index': index,
                             'difference': item.Space - processTime
@@ -64,17 +65,19 @@ angular.
         }
 
         $scope.addProcess = function () {
-            let process = {
-                arrival: $scope.newProcess.arrival,
-                time: $scope.newProcess.time,
-                name: 'P ' + ($scope.processes.length + 1),
-                location: $scope.checkWorstFit($scope.newProcess.time)
+            if($scope.checkMemoryAvailable()) {
+                let process = {
+                    arrival: $scope.newProcess.arrival,
+                    time: $scope.newProcess.time,
+                    name: 'P ' + ($scope.processes.length + 1),
+                    location: $scope.checkWorstFit($scope.newProcess.time)
+                }
+                if (process.time <= $scope.memoryLeft) {
+                    $scope.processes.push(process);
+                    $scope.memoryLeft -= process.time;
+                }
+                $scope.newProcess = {};
             }
-            if (process.time <= $scope.memoryLeft) {
-                $scope.processes.push(process);
-                $scope.memoryLeft -= process.time;
-            }
-            $scope.newProcess = {};
         }
 
         $scope.init = function () {

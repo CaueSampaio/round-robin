@@ -86,10 +86,10 @@
           <form layout="row" name="newProcessForm">
             <input class="new-process" type="number" ng-model="newProcess.arrival" placeholder="Momento de chegada">
             <input class="new-process" type="number" ng-model="newProcess.time" placeholder="Tempo do processo">
-            <md-button class="md-primary md-raised" ng-disabled="newProcess.time > memoryLeft || running" ng-click="addProcess()">
+            <md-button class="md-primary md-raised" ng-disabled="newProcess.time > memoryLeft || running || !checkMemoryAvailable()" ng-click="addProcess()">
               <md-icon>add</md-icon>
             </md-button>
-            {{checkMemoryAvailable()}}
+            <span ng-if="!checkMemoryAvailable()">Nenhum slot de memória com capacidade para o tamanho do processo</span>
           </form>
           <md-button class="md-warn md-raised" ng-disabled="lockQuantum == false || processes.length == 0 || running" ng-click="init()">Iniciar</md-button>
           <span ng-if="newProcess.time > memoryLeft">Limite de memória excedido</span>
