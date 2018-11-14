@@ -31,13 +31,27 @@ angular.
 
         $scope.checkWorstFit = function(processTime) {
             let selectedLocation;
+            if($scope.checkMemoryAvailable()) {
+                selectedLocation = $scope.memoryAdresses.find(function(item) {
+                    return item.Space > processTime;
+                })
+            } else return false
+        }
+
+        $scope.checkMemoryAvailable = function() {
+            let flag = false;
+            flag = $scope.memoryAdresses.some(function(item, index) {
+                return item.Space >= $scope.newProcess.time;
+            })
+            return flag;
         }
 
         $scope.addProcess = function () {
             let process = {
                 arrival: $scope.newProcess.arrival,
                 time: $scope.newProcess.time,
-                name: 'P ' + ($scope.processes.length + 1)
+                name: 'P ' + ($scope.processes.length + 1),
+                location: $scope.checkWorstFit($scope.newProcess.time)
             }
             if (process.time <= $scope.memoryLeft) {
                 $scope.processes.push(process);

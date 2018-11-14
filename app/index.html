@@ -88,6 +88,7 @@
             <md-button class="md-primary md-raised" ng-disabled="newProcess.time > memoryLeft || running" ng-click="addProcess()">
               <md-icon>add</md-icon>
             </md-button>
+            {{checkMemoryAvailable()}}
           </form>
           <md-button class="md-warn md-raised" ng-disabled="lockQuantum == false || processes.length == 0 || running" ng-click="init()">Iniciar</md-button>
           <span ng-if="newProcess.time > memoryLeft">Limite de memória excedido</span>
